@@ -1,0 +1,28 @@
+# team117
+
+## Basic Information
+
+|   Info      |        Description     |
+| ----------- | ---------------------- |
+| TeamID      |        Team-117        |
+| TeamName    |           Team LARP         |
+| Captain     |       Leon Wang     |
+| Captain     |  leonw2@illinois.edu  |
+| Member1     |        Raymond Bellin       |
+| Member1     |   rbellin2@illinois.edu  |
+| Member2     |  Aaron De Los Santos  |
+| Member2     |   htd2@illinois.edu  |
+| Member3     |     Pinakin Kanade     |
+| Member3     |  pkanade2@illinois.edu |
+
+## Project Information
+
+|   Info      |        Description     |
+| ----------- | ---------------------- |
+|  Title      |       TBD     |
+| System URL  |      TBD    |
+| Video Link  |      TBD     |
+
+## Project Summary
+
+> TBD
