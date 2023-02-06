@@ -1,31 +1,5 @@
-# Project Proposal
+# Docs
 
-## Project Title
+This folder is where you will keep your documentations. For example, the different reports and proposals that were requested. Please include your reports in PDF or markdown.
 
-## Project Summary
-
-text goes here
-
-## Description
-
-text goes here
-
-## Usefulness
-
-text goes here
-
-## Realness
-
-text goes here
-
-## Functionality
-
-text goes here
-
-### Mockup
-
-image goes here
-
-### Work Distribution
-
-text goes here
+Please keep your team information in the root folder, not here.
