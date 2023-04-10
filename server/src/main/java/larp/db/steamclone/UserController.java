@@ -13,7 +13,7 @@ public class UserController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/games")
+    @GetMapping("/users")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Users";
         return ResponseEntity.ok(jdbcTemplate.queryForList(sql));
