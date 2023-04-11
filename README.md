@@ -5,10 +5,12 @@
 For our CS 411 project, we want to devise a cleaner, minimalistic, and more intuitive version of the Steam website store dedicated for browsing games.
 
 # Interface Demo
+Make sure that you have npm, NodeJS, Java SDK, and Maven installed.
 
-## Server
-Make sure that the database is online and your local IP is registered on it.
+Pull the repo and go to `/app` and run `npm install` to install frontend packages.
 
-To run the server, have Java SDK and Maven installed, `cd` to `server/` and in terminal run `mvn spring-boot:run`. If you don't have Maven you can run `./mvnw spring-boot:run` instead.
+If you made backend changes in `server/` or want to test the whole app, go to `/server` and run `mvn spring-boot:run`, or `./mvnw spring-boot:run` if you don't have Maven. Also make sure that the database is online and your local IP is registered on it.
 
-Navigate to http://localhost:8080.
+If you made frontend changes in `/app`, save them by running `npm run build`.
+
+To test only the frontend, go to `/app` and run `npm run dev`.
