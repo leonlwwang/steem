@@ -21,6 +21,7 @@
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append('search', search);
 
     const response = await fetch('/api/games/query1', {
       method: 'POST',
@@ -35,6 +36,7 @@
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append('search', search);
 
     const response = await fetch('/api/games/query2', {
       method: 'POST',

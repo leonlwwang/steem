@@ -32,16 +32,16 @@ public class GamesController {
     }
 
     @PostMapping("/api/games/query1")
-    public ResponseEntity<List<Map<String, Object>>> searchQuery1(Model model) {
-        String sql = "SELECT * FROM Games g JOIN GameGenre ge ON g.gameName = ge.gameName WHERE website = (SELECT website FROM Games WHERE gameName = 'Bonanza Bros') AND g.steamSpyNumPlayers >= 10000 AND g.initialPrice < 10";
+    public ResponseEntity<List<Map<String, Object>>> searchQuery1(@RequestParam String search, Model model) {
+        String sql = "SELECT * FROM Games g JOIN GameGenre ge ON g.gameName = ge.gameName WHERE website = (SELECT website FROM Games WHERE gameName = '" + search + "' LIMIT 1) AND g.steamSpyNumPlayers >= 10000 AND g.initialPrice < 10";
         List<Map<String, Object>> games = jdbcTemplate.queryForList(sql);
         model.addAttribute("games", games);
         return ResponseEntity.ok(games);
     }
 
     @PostMapping("/api/games/query2")
-    public ResponseEntity<List<Map<String, Object>>> searchQuery2(Model model) {
-        String sql = "SELECT * FROM Games g JOIN Configurations c ON g.configurationID = c.configurationID WHERE c.minRequirementPC = (SELECT c2.minRequirementPC FROM Games g2 JOIN Configurations c2 ON g2.configurationID = c2.configurationID WHERE g2.gameName = 'Counter-Strike') ORDER BY g.gameName";
+    public ResponseEntity<List<Map<String, Object>>> searchQuery2(@RequestParam String search, Model model) {
+        String sql = "SELECT * FROM Games g JOIN Configurations c ON g.configurationID = c.configurationID WHERE c.minRequirementPC = (SELECT c2.minRequirementPC FROM Games g2 JOIN Configurations c2 ON g2.configurationID = c2.configurationID WHERE g2.gameName = '" + search + "') ORDER BY g.gameName";
         List<Map<String, Object>> games = jdbcTemplate.queryForList(sql);
         model.addAttribute("games", games);
         return ResponseEntity.ok(games);
