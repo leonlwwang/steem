@@ -51,7 +51,10 @@
 </script>
 
 <main>
-  <h1>Steam Clone</h1>
+  <div class="top-bar">
+    <h1>STEEM</h1>
+    <a href="/"><img style="display: inline-block;" id="logo" src="/logo.png" alt="bad-logo" />
+  </div>
 
   <div class="card">
     <h2>Registration</h2>
@@ -63,11 +66,11 @@
     {#if users.length > 0}
       <ul>
         {#each users as user}
-          <li>{user.username} {user.realName} ({user.emailAddress}) <button on:click={() => deleteUser(user.username)}>🗑️</button></li>
+          <li>{user.username} {user.realName} ({user.emailAddress}) <button on:click={() => deleteUser(user.username)}>⛔</button></li>
         {/each}
       </ul>
     {:else}
-      <p>No users found.</p>
+      <p style="color:darkgray">No users found 😢</p>
     {/if}
   </div>
  

@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: JetBrains Mono, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,6 +12,23 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 4rem;
+  height: 6rem;
+  margin-right: 1rem;
+}
+
+#logo {
+  height: 5rem;
+  object-fit: contain;
 }
 
 label {
@@ -35,18 +52,9 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.66;
-}
-
 .btn-container {
   display: flex;
   padding-bottom: 2rem;
-}
-
-.card {
-
 }
 
 .searchform {

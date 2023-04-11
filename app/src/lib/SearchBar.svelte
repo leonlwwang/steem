@@ -49,11 +49,11 @@
 <div class="btn-container">
   <form on:submit={submitSearch}>
     <div class="searchform">
-      <label for="search">search</label>
+      <label for="search">🔎</label>
       <input type="text" class="form-control col-lg-9" id="search" name="search" placeholder=" search for games..." bind:value={search} required>
     </div>
     <div style="display: flex;">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" style="margin-right: 1rem;">Submit</button>
       <button on:click={submitQuery1} id="btnq1" class="btn btn-primary" style="margin-right: 0.5rem;">Query 1</button>
       <button on:click={submitQuery2} id="btnq2" class="btn btn-primary" style="margin-left: 0.5rem;">Query 2</button>
     </div>

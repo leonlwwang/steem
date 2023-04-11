@@ -15,17 +15,33 @@
   
   <form on:submit={handleSubmit}>
     <label>
-      username
+      username:
       <input type="text" bind:value={username} required />
     </label>
     <label>
-      name
+      name:
       <input type="text" bind:value={realName} required />
     </label>
     <label>
-      email address
+      email:
       <input type="email" bind:value={emailAddress} required />
     </label>
     <button type="submit">Sign Up</button>
   </form>
-  
+
+  <style scoped>
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      max-width: 11rem;
+    }
+  </style>
