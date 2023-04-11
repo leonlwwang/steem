@@ -26,6 +26,6 @@
       email address
       <input type="email" bind:value={emailAddress} required />
     </label>
-    <button type="submit">Add User</button>
+    <button type="submit">Sign Up</button>
   </form>
   

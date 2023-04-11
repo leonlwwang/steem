@@ -52,12 +52,12 @@
       <label for="search">search</label>
       <input type="text" class="form-control col-lg-9" id="search" name="search" placeholder=" search for games..." bind:value={search} required>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div style="display: flex;">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button on:click={submitQuery1} id="btnq1" class="btn btn-primary" style="margin-right: 0.5rem;">Query 1</button>
+      <button on:click={submitQuery2} id="btnq2" class="btn btn-primary" style="margin-left: 0.5rem;">Query 2</button>
+    </div>
   </form>
-  <div style="display: flex;">
-    <button on:click={submitQuery1} id="btnq1" class="btn btn-primary" style="margin-right: 0.5rem;">Query 1</button>
-    <button on:click={submitQuery2} id="btnq2" class="btn btn-primary" style="margin-left: 0.5rem;">Query 2</button>
-  </div>
 </div>
 
 {#if data.length > 0}

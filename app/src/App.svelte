@@ -54,7 +54,7 @@
   <h1>Steam Clone</h1>
 
   <div class="card">
-    <h2>Add User</h2>
+    <h2>Registration</h2>
     <AddUserForm on:submit={handleAddUser} />
   </div>
 
@@ -63,7 +63,7 @@
     {#if users.length > 0}
       <ul>
         {#each users as user}
-          <li>{user.username} {user.realName} ({user.emailAddress}) <button on:click={() => deleteUser(user.username)}>delete</button></li>
+          <li>{user.username} {user.realName} ({user.emailAddress}) <button on:click={() => deleteUser(user.username)}>🗑️</button></li>
         {/each}
       </ul>
     {:else}
