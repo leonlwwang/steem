@@ -13,7 +13,7 @@ public class ConfigurationController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/config")
+    @GetMapping("/api/config")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Configurations";
         return ResponseEntity.ok(jdbcTemplate.queryForList(sql));

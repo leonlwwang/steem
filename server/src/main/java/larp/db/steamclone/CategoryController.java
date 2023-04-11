@@ -13,7 +13,7 @@ public class CategoryController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/category")
+    @GetMapping("/api/category")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Category";
         return ResponseEntity.ok(jdbcTemplate.queryForList(sql));

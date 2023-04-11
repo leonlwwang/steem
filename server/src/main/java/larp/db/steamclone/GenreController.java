@@ -13,7 +13,7 @@ public class GenreController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/genre")
+    @GetMapping("/api/genre")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Genre";
         return ResponseEntity.ok(jdbcTemplate.queryForList(sql));
