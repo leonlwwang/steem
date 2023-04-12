@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -43,6 +44,18 @@ public class UserController {
             rs.getString("emailAddress")
         ), username);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/api/users/{username}")
+    public ResponseEntity<String> updateUsername(@PathVariable String username, @RequestBody String newUsername) {
+        String sql = "UPDATE Users SET username = ? WHERE username = ?";
+        newUsername = newUsername.substring(1, newUsername.length() - 1);
+        int rowsAffected = jdbcTemplate.update(sql, newUsername, username);
+        if (rowsAffected == 0) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok("Username updated from " + username + " to " + newUsername);
+        }
     }
 
     @DeleteMapping("/api/users/{username}")

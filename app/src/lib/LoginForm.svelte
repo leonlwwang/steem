@@ -1,36 +1,38 @@
 <script>
-    $: loggedIn = 0;
-    $: usr = null;
+  import ChangeUsernameForm from './ChangeUsernameForm.svelte';
 
-    function handleSubmit(event) {
-      event.preventDefault();
-  
-      const username = event.target.username.value.trim();
-  
-      if (!username) {
-        console.error('Username is required');
-        return;
-      }
-  
-      fetch(`/api/users/${username}`)
-        .then(response => {
-          if (response.ok) {
-            console.log(`User ${username} found`);
-            loggedIn = 1;
-            usr = username;
-          } else {
-            loggedIn = -1;
-            console.error(`User ${username} not found`);
-          }
-        })
-        .catch(error => console.error(error));
+  $: loggedIn = 0;
+  $: usr = null;
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const username = event.target.username.value.trim();
+
+    if (!username) {
+      console.error('Username is required');
+      return;
     }
 
-    function logout() {
-      loggedIn = 0;
-      usr = null;
-    }
-  </script>
+    fetch(`/api/users/${username}`)
+      .then(response => {
+        if (response.ok) {
+          console.log(`User ${username} found`);
+          loggedIn = 1;
+          usr = username;
+        } else {
+          loggedIn = -1;
+          console.error(`User ${username} not found`);
+        }
+      })
+      .catch(error => console.error(error));
+  }
+
+  function logout() {
+    loggedIn = 0;
+    usr = null;
+  }
+</script>
   
   <form on:submit={handleSubmit}>
     <div>
@@ -50,6 +52,9 @@
   {:else if loggedIn == -1}
     <p style="color: #BB342F; font-size: 0.75rem"><em>Username does not exist.</em></p>
   {/if}
+
+  <h2>Change Username</h2>
+  <ChangeUsernameForm username={usr} />
   
   <style scoped>
     form {
