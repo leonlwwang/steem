@@ -15,15 +15,15 @@
   
   <form on:submit={handleSubmit}>
     <label>
-      username:
+      <p style="display: inline; padding-right: 1em;">username:</p>
       <input type="text" bind:value={username} required />
     </label>
     <label>
-      name:
+      <p style="display: inline; padding-right: 1em;">name:</p>
       <input type="text" bind:value={realName} required />
     </label>
     <label>
-      email:
+      <p style="display: inline; padding-right: 1em;">email:</p>
       <input type="email" bind:value={emailAddress} required />
     </label>
     <button type="submit">Sign Up</button>
@@ -36,7 +36,13 @@
       align-items: left;
     }
 
+    input {
+      display: inline-block;
+      width: 200px;
+    }
+
     label {
+      padding-right: 1em;
       display: block;
       margin-bottom: 1rem;
     }

@@ -1,6 +1,7 @@
 <script>
   import SearchBar from './lib/SearchBar.svelte'
   import AddUserForm from './lib/AddUserForm.svelte';
+  import LoginForm from './lib/LoginForm.svelte';
   import { onMount } from 'svelte';
 
   let users = [];
@@ -51,16 +52,19 @@
 </script>
 
 <main>
+  <!-- header -->
   <div class="top-bar">
     <h1>STEEM</h1>
     <a href="/"><img style="display: inline-block;" id="logo" src="/logo.png" alt="bad-logo" />
   </div>
 
+  <!-- registration form -->
   <div class="card">
     <h2>Registration</h2>
     <AddUserForm on:submit={handleAddUser} />
   </div>
 
+  <!-- existing users table -->
   <div class="card">
     <h2>Users</h2>
     {#if users.length > 0}
@@ -88,7 +92,14 @@
       <p style="color:darkgray">No users found 😢</p>
     {/if}
   </div>
+
+  <!-- login form -->
+  <div class="card">
+    <h2>Login</h2>
+    <LoginForm />
+  </div>
  
+  <!-- search bar -->
   <div class="card">
     <h2>Search</h2>
     <SearchBar />

@@ -34,6 +34,17 @@ public class UserController {
         return ResponseEntity.ok("User created with username: " + user.getUsername());
     }
 
+    @GetMapping("/api/users/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        String sql = "SELECT * FROM Users WHERE username = ?";
+        User user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new User(
+            rs.getString("username"),
+            rs.getString("realName"),
+            rs.getString("emailAddress")
+        ), username);
+        return ResponseEntity.ok(user);
+    }
+
     @DeleteMapping("/api/users/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username) {
         String sql = "DELETE FROM Users WHERE username = ?";
