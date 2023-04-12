@@ -64,11 +64,26 @@
   <div class="card">
     <h2>Users</h2>
     {#if users.length > 0}
-      <ul>
-        {#each users as user}
-          <li>{user.username} {user.realName} ({user.emailAddress}) <button on:click={() => deleteUser(user.username)}>⛔</button></li>
-        {/each}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th class="element">Username</th>
+            <th class="element">Name</th>
+            <th class="element">Email</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each users as user}
+            <tr>
+              <td class="element">{user.username}</td>
+              <td class="element">{user.realName}</td>
+              <td class="element">{user.emailAddress}</td>
+              <td><button on:click={() => deleteUser(user.username)}>❌</button></td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
     {:else}
       <p style="color:darkgray">No users found 😢</p>
     {/if}
@@ -79,3 +94,15 @@
     <SearchBar />
   </div>
 </main>
+
+<style scoped>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .element {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+  }
+</style>

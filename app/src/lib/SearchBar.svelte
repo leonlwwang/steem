@@ -66,4 +66,6 @@
   {#each data as game}
     <img src={game.image} alt={game.gameName} />
   {/each}
+{:else}
+  <p style="color:darkgray">No results found.</p>
 {/if}
