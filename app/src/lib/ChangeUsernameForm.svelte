@@ -1,6 +1,7 @@
 <script>
     export let username;
     let newUsername = null;
+    $: changeSuccess = 0;
   
     async function handleSubmit(event) {
       event.preventDefault();
@@ -19,9 +20,11 @@
       });
   
       if (response.ok) {
+        changeSuccess = 1;
         console.log(`Username updated to ${newUsername}`);
         username = newUsername;
       } else {
+        changeSuccess = -1;
         console.error('Failed to update username');
       }
     }
@@ -34,6 +37,12 @@
   </div>
   <button type="submit">Update</button>
 </form>
+
+{#if changeSuccess == 1}
+  <p style="font-size: 0.8rem">Username successfully changed to <em>{username}</em>.</p>
+{:else if changeSuccess == -1}
+  <p style="color: #BB342F; font-size: 0.7rem"><em>You need to log in to change your username.</em></p>
+{/if}
 
 <style scoped>
     form {
