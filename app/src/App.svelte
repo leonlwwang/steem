@@ -3,7 +3,7 @@
   import AddUserForm from './lib/AddUserForm.svelte';
   import LoginForm from './lib/LoginForm.svelte';
   import { onMount } from 'svelte';
-
+  import ApplyDiscountForm from './lib/ApplyDiscountForm.svelte';
   let users = [];
 
   onMount(async () => {
@@ -103,6 +103,12 @@
   <div class="card">
     <h2>Search</h2>
     <SearchBar />
+  </div>
+  
+  <!-- Discount bar-->
+  <div class="card">
+    <h2>Discount</h2>
+    <ApplyDiscountForm />
   </div>
 </main>
 

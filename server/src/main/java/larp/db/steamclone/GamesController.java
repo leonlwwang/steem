@@ -12,11 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 @RestController
 public class GamesController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    private final GameService gameService;
 
+    public GamesController() {
+        gameService = new GameService();
+    }
     @GetMapping("/api/games")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Games";
@@ -46,4 +52,15 @@ public class GamesController {
         model.addAttribute("games", games);
         return ResponseEntity.ok(games);
     }
+
+    @PostMapping("/api/games/apply-discount")
+    public ResponseEntity<Void> applyDiscount(@RequestBody Map<String, Object> payload) {
+        String genre = (String) payload.get("genre");
+        double discountRate = ((Number) payload.get("discountRate")).doubleValue();
+
+        gameService.applyDiscountByGenre(genre, discountRate);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
