@@ -5,15 +5,17 @@
   
   const dispatch = createEventDispatcher();
   let genre = '';
+  let releaseDate = '';
+  let gameName = '';
   let discountRate = 0;
 
   async function applyDiscount() {
     try {
       const response = await axios.post('/api/games/apply-discount', null, { 
-        params: { genre, discountRate },
+        params: { genre, releaseDate, gameName, discountRate },
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
-      dispatch('applyDiscount', { genre, discountRate });
+      dispatch('applyDiscount', { genre, releaseDate, gameName, discountRate });
       alert(response.data);
     } catch (error) {
       console.error('Error applying discount:', error);
@@ -21,8 +23,6 @@
     }
   }
 </script>
-
-<!-- Rest of the component remains the same -->
 
 <div>
   <h2>Apply Discount</h2>
@@ -45,6 +45,11 @@
       <option value="Massively Multiplayer">Massively Multiplayer</option>
     </select>
     
+    <label for="releaseDate">Release Date (Month Date Year):</label>
+    <input type="text" id="releaseDate" bind:value={releaseDate} placeholder="e.g. Aug 25 2009" />
+
+    <label for="gameName">Game Name:</label>
+    <input type="text" id="gameName" bind:value={gameName} />
 
     <label for="discountRate">Discount Rate:</label>
     <div class="discount-slider">
@@ -69,5 +74,6 @@
     <button type="submit">Apply Discount</button>
   </form>
 </div>
+
 
 

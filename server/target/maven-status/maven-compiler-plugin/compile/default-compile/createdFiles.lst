@@ -1,9 +1,9 @@
-larp/db/steamclone/Bookmark.class
 larp/db/steamclone/ConfigurationController.class
+larp/db/steamclone/GenreController.class
+larp/db/steamclone/User.class
+larp/db/steamclone/UserController.class
+larp/db/steamclone/Bookmark.class
 larp/db/steamclone/GamesController.class
 larp/db/steamclone/CategoryController.class
 larp/db/steamclone/SteamcloneApplication.class
 larp/db/steamclone/BookmarkController.class
-larp/db/steamclone/GenreController.class
-larp/db/steamclone/User.class
-larp/db/steamclone/UserController.class

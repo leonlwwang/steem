@@ -48,11 +48,16 @@ public class GamesController {
         return ResponseEntity.ok(games);
     }
 
+    
     @PostMapping("/api/games/apply-discount")
-    public ResponseEntity<String> applyDiscount(@RequestParam String genre, @RequestParam BigDecimal discountRate) {
+    public ResponseEntity<String> applyDiscount(
+        @RequestParam(required = false) String genre,
+        @RequestParam(required = false) String releaseDate,
+        @RequestParam(required = false) String gameName,
+        @RequestParam BigDecimal discountRate) {
         try {
-            String procedureCall = "{call ApplyDiscountByGenre(?, ?)}";
-            jdbcTemplate.update(procedureCall, genre, discountRate);
+            String procedureCall = "{call ApplyDiscountByCriteria(?, ?, ?, ?)}";
+            jdbcTemplate.update(procedureCall, genre, releaseDate, gameName, discountRate);
             return ResponseEntity.ok("Discount applied successfully.");
         } catch (Exception e) {
             e.printStackTrace();
