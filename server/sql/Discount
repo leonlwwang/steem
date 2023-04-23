@@ -1,20 +1,51 @@
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS ApplyDiscountByCriteria $$
+
 CREATE PROCEDURE ApplyDiscountByCriteria(
     IN p_genre VARCHAR(255),
     IN p_release_date VARCHAR(255),
     IN p_game_name VARCHAR(255),
     IN p_discount_rate DECIMAL(5,2))
 BEGIN
-    UPDATE Games AS g
-    JOIN GameGenre AS gg ON g.gameName = gg.gameName
-    SET g.finalPrice = g.finalPrice * (1 - p_discount_rate)
-    WHERE (gg.gameGenre = p_genre OR p_genre = '')
-      AND (g.releaseDate = p_release_date OR p_release_date = '')
-      AND (g.gameName = p_game_name OR g.gameName = CONCAT('"', p_game_name, '"') OR p_game_name = '');
-END$$
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_gameName VARCHAR(255);
+    DECLARE v_oldPrice DECIMAL(10,4);
+    DECLARE v_newPrice DECIMAL(10,4);
+    DECLARE gameCursor CURSOR FOR
+        SELECT g.gameName, g.finalPrice
+        FROM Games AS g
+        JOIN GameGenre AS gg ON g.gameName = gg.gameName
+        WHERE (gg.gameGenre = p_genre OR p_genre = '')
+          AND (g.releaseDate = p_release_date OR p_release_date = '')
+          AND ((g.gameName = p_game_name) OR (g.gameName = CONCAT('"', p_game_name, '"') AND p_game_name <> ''));
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN gameCursor;
+
+    read_loop: LOOP
+        FETCH gameCursor INTO v_gameName, v_oldPrice;
+
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SET v_newPrice = v_oldPrice * (1 - p_discount_rate);
+
+        UPDATE Games
+        SET finalPrice = v_newPrice
+        WHERE gameName = v_gameName;
+
+        INSERT INTO price_change_log (gameName, old_price, new_price, changed_at)
+        VALUES (v_gameName, v_oldPrice, v_newPrice, NOW());
+    END LOOP;
+
+    CLOSE gameCursor;
+END $$
 
 DELIMITER ;
+
 
 
 
