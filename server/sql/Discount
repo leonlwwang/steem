@@ -3,7 +3,7 @@ DELIMITER $$
 CREATE PROCEDURE ApplyDiscountByGenre(IN p_genre VARCHAR(255), IN p_discount_rate DECIMAL(5,2))
 BEGIN
     UPDATE Games AS g
-    JOIN GameGenre AS gg ON g.gameID = gg.gameID
+    JOIN GameGenre AS gg ON g.gameName = gg.gameName
     SET g.finalPrice = g.finalPrice * (1 - p_discount_rate)
     WHERE gg.gameGenre = p_genre;
 END$$
@@ -21,7 +21,7 @@ CREATE TABLE price_change_log (
 DELIMITER $$
 
 CREATE TRIGGER log_price_change
-AFTER UPDATE ON games
+AFTER UPDATE ON Games
 FOR EACH ROW
 BEGIN
     IF NEW.finalPrice <> OLD.finalPrice THEN
