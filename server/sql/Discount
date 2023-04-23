@@ -18,8 +18,13 @@ BEGIN
         FROM Games AS g
         JOIN GameGenre AS gg ON g.gameName = gg.gameName
         WHERE (gg.gameGenre = p_genre OR p_genre = '')
-          AND (g.releaseDate = p_release_date OR p_release_date = '')
-          AND ((g.gameName = p_game_name) OR (g.gameName = CONCAT('"', p_game_name, '"') AND p_game_name <> ''));
+            AND (g.releaseDate = p_release_date OR p_release_date = '')
+            AND (
+                (p_game_name = '' AND g.gameName <> '')
+                OR REPLACE(g.gameName, '"', '') = p_game_name
+                OR g.gameName = CONCAT('"', p_game_name, '"')
+            );
+
 
     -- Declare a continue handler for NOT FOUND condition
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
@@ -54,6 +59,12 @@ BEGIN
 
     -- Close the cursor
     CLOSE gameCursor;
+
+    -- After closing the cursor, SELECT the updated records
+    SELECT g.gameName, pl.old_price, pl.new_price
+    FROM price_change_log AS pl
+    JOIN Games AS g ON pl.gameName = g.gameName
+    WHERE pl.changed_at >= NOW() - INTERVAL 1 SECOND;
 END $$
 
 DELIMITER ;

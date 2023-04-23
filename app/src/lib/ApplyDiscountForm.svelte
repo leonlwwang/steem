@@ -2,27 +2,28 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import axios from 'axios';
+  import DiscountResults from './DiscountResults.svelte';
 
   const dispatch = createEventDispatcher();
   let genre = '';
   let releaseDate = '';
   let gameName = '';
   let discountRate = 0;
+  let discountResults = [];
 
 
   async function applyDiscount() {
-    try {
-      const response = await axios.post('/api/games/apply-discount', null, { 
-        params: { genre, releaseDate, gameName, discountRate },
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
-      dispatch('applyDiscount', { genre, releaseDate, gameName, discountRate });
-      alert(response.data);
-    } catch (error) {
-      console.error('Error applying discount:', error);
-      alert('Error applying discount. Please try again.');
-    }
+  try {
+    const response = await axios.post('/api/games/apply-discount', null, {
+      params: { genre, releaseDate, gameName, discountRate },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+    discountResults = response.data;
+  } catch (error) {
+    console.error('Error applying discount:', error);
+    alert('Error applying discount. Please try again.');
   }
+}
 
 
 </script>
@@ -77,6 +78,7 @@
     <button type="submit">Apply Discount</button>
   </form>
 </div>
+<DiscountResults bind:results={discountResults} />
 
 
 

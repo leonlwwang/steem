@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
+import java.util.Collections;
 
 @RestController
 public class GamesController {
@@ -50,19 +51,20 @@ public class GamesController {
 
     
     @PostMapping("/api/games/apply-discount")
-    public ResponseEntity<String> applyDiscount(
+    public ResponseEntity<List<Map<String, Object>>> applyDiscount(
         @RequestParam(required = false) String genre,
         @RequestParam(required = false) String releaseDate,
         @RequestParam(required = false) String gameName,
         @RequestParam BigDecimal discountRate) {
         try {
             String procedureCall = "{call ApplyDiscountByCriteria(?, ?, ?, ?)}";
-            jdbcTemplate.update(procedureCall, genre, releaseDate, gameName, discountRate);
-            return ResponseEntity.ok("Discount applied successfully.");
+            List<Map<String, Object>> result = jdbcTemplate.queryForList(procedureCall, genre, releaseDate, gameName, discountRate);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error applying discount.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
+
 
 }
