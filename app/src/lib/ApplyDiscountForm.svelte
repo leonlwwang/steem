@@ -28,11 +28,44 @@
   <h2>Apply Discount</h2>
   <form on:submit|preventDefault={applyDiscount}>
     <label for="genre">Genre:</label>
-    <input type="text" id="genre" bind:value={genre} required />
+    <select id="genre" bind:value={genre} required>
+      <option value="">Select genre</option>
+      <option value="NonGame">NonGame</option>
+      <option value="Indie">Indie</option>
+      <option value="Action">Action</option>
+      <option value="Adventure">Adventure</option>
+      <option value="Casual">Casual</option>
+      <option value="Strategy">Strategy</option>
+      <option value="RPG">RPG</option>
+      <option value="Simulation">Simulation</option>
+      <option value="Early Access">Early Access</option>
+      <option value="Free to Play">Free to Play</option>
+      <option value="Sports">Sports</option>
+      <option value="Racing">Racing</option>
+      <option value="Massively Multiplayer">Massively Multiplayer</option>
+    </select>
+    
 
     <label for="discountRate">Discount Rate:</label>
-    <input type="number" id="discountRate" bind:value={discountRate} min="0" max="1" step="0.01" required />
-
+    <div class="discount-slider">
+      <input
+        type="range"
+        id="discountSlider"
+        min="0"
+        max="1"
+        step="0.01"
+        bind:value={discountRate}
+      />
+      <input
+        type="number"
+        id="discountRate"
+        min="0"
+        max="1"
+        step="0.01"
+        bind:value={discountRate}
+        required
+      />
+    </div>
     <button type="submit">Apply Discount</button>
   </form>
 </div>
