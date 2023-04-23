@@ -2,12 +2,13 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import axios from 'axios';
-  
+
   const dispatch = createEventDispatcher();
   let genre = '';
   let releaseDate = '';
   let gameName = '';
   let discountRate = 0;
+
 
   async function applyDiscount() {
     try {
@@ -22,6 +23,8 @@
       alert('Error applying discount. Please try again.');
     }
   }
+
+
 </script>
 
 <div>
@@ -74,6 +77,7 @@
     <button type="submit">Apply Discount</button>
   </form>
 </div>
+
 
 
 

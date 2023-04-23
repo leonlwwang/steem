@@ -58,11 +58,6 @@ END $$
 
 DELIMITER ;
 
-
-
-
-
-
 CREATE TABLE price_change_log (
     id INT AUTO_INCREMENT PRIMARY KEY,
     gameName varchar(255),
