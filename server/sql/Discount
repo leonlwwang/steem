@@ -2,18 +2,19 @@ DELIMITER $$
 
 CREATE PROCEDURE ApplyDiscountByGenre(IN p_genre VARCHAR(255), IN p_discount_rate DECIMAL(5,2))
 BEGIN
-    UPDATE games
-    SET price = price * (1 - p_discount_rate)
-    WHERE genre = p_genre;
+    UPDATE Games AS g
+    JOIN GameGenre AS gg ON g.gameID = gg.gameID
+    SET g.finalPrice = g.finalPrice * (1 - p_discount_rate)
+    WHERE gg.gameGenre = p_genre;
 END$$
 
 DELIMITER ;
 
 CREATE TABLE price_change_log (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    game_id INT,
-    old_price DECIMAL(10,2),
-    new_price DECIMAL(10,2),
+    gameName varchar(255),
+    old_price DECIMAL(10,4),
+    new_price DECIMAL(10,4),
     changed_at DATETIME
 );
 
@@ -23,9 +24,9 @@ CREATE TRIGGER log_price_change
 AFTER UPDATE ON games
 FOR EACH ROW
 BEGIN
-    IF NEW.price <> OLD.price THEN
-        INSERT INTO price_change_log (game_id, old_price, new_price, changed_at)
-        VALUES (OLD.id, OLD.price, NEW.price, NOW());
+    IF NEW.finalPrice <> OLD.finalPrice THEN
+        INSERT INTO price_change_log (gameName, old_price, new_price, changed_at)
+        VALUES (OLD.gameName, OLD.finalPrice, NEW.finalPrice, NOW());
     END IF;
 END$$
 
