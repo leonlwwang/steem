@@ -1,7 +1,6 @@
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/User.java
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/BookmarkController.java
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/CategoryController.java
-/Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/GameService.java
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/Bookmark.java
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/ConfigurationController.java
 /Users/raymond/sp23-cs411-team117-LARP/server/src/main/java/larp/db/steamclone/GamesController.java

@@ -1,28 +1,23 @@
 package larp.db.steamclone;
 import java.util.List;
 import java.util.Map;
-
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.RequestBody;
-
 @RestController
 public class GamesController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final GameService gameService;
 
-    public GamesController() {
-        gameService = new GameService();
-    }
     @GetMapping("/api/games")
     public ResponseEntity<List<Map<String, Object>>> getGames() {
         String sql = "SELECT * FROM Games";
@@ -54,13 +49,15 @@ public class GamesController {
     }
 
     @PostMapping("/api/games/apply-discount")
-    public ResponseEntity<Void> applyDiscount(@RequestBody Map<String, Object> payload) {
-        String genre = (String) payload.get("genre");
-        double discountRate = ((Number) payload.get("discountRate")).doubleValue();
-
-        gameService.applyDiscountByGenre(genre, discountRate);
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> applyDiscount(@RequestParam String genre, @RequestParam BigDecimal discountRate) {
+        try {
+            String procedureCall = "{call ApplyDiscountByGenre(?, ?)}";
+            jdbcTemplate.update(procedureCall, genre, discountRate);
+            return ResponseEntity.ok("Discount applied successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error applying discount.");
+        }
     }
 
 }

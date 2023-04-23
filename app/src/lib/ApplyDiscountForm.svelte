@@ -1,46 +1,40 @@
+<!-- ApplyDiscountForm.svelte -->
 <script>
-    import { onMount } from 'svelte';
-    let genre = '';
-    let discountRate = 0;
+  import { createEventDispatcher } from 'svelte';
+  import axios from 'axios';
   
-    async function applyDiscount() {
-      const response = await fetch('/api/games/apply-discount', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ genre, discountRate }),
+  const dispatch = createEventDispatcher();
+  let genre = '';
+  let discountRate = 0;
+
+  async function applyDiscount() {
+    try {
+      const response = await axios.post('/api/games/apply-discount', null, { 
+        params: { genre, discountRate },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
-  
-      if (response.ok) {
-        alert('Discount applied successfully.');
-      } else {
-        alert('Error applying discount.');
-      }
+      dispatch('applyDiscount', { genre, discountRate });
+      alert(response.data);
+    } catch (error) {
+      console.error('Error applying discount:', error);
+      alert('Error applying discount. Please try again.');
     }
-  </script>
-  
-  <div>
+  }
+</script>
+
+<!-- Rest of the component remains the same -->
+
+<div>
+  <h2>Apply Discount</h2>
+  <form on:submit|preventDefault={applyDiscount}>
     <label for="genre">Genre:</label>
-    <select id="genre" bind:value={genre}>
-      <option value="">Select a genre</option>
-      <option value="GenreIsNonGame">Non-Game</option>
-      <option value="GenreIsIndie">Indie</option>
-      <option value="GenreIsAction">Action</option>
-      <option value="GenreIsAdventure">Adventure</option>
-      <option value="GenreIsCasual">Casual</option>
-      <option value="GenreIsStrategy">Strategy</option>
-      <option value="GenreIsRPG">RPG</option>
-      <option value="GenreIsSimulation">Simulation</option>
-      <option value="GenreIsEarlyAccess">Early Access</option>
-      <option value="GenreIsFreeToPlay">Free to Play</option>
-      <option value="GenreIsSports">Sports</option>
-      <option value="GenreIsRacing">Racing</option>
-      <option value="GenreIsMassivelyMultiplayer">Massively Multiplayer</option>
-    </select>
-  </div>
-  <div>
+    <input type="text" id="genre" bind:value={genre} required />
+
     <label for="discountRate">Discount Rate:</label>
-    <input type="number" id="discountRate" bind:value={discountRate} step="0.01" />
-  </div>
-  <button on:click={applyDiscount}>Apply Discount</button>
+    <input type="number" id="discountRate" bind:value={discountRate} min="0" max="1" step="0.01" required />
+
+    <button type="submit">Apply Discount</button>
+  </form>
+</div>
+
+
