@@ -61,9 +61,10 @@ BEGIN
     CLOSE gameCursor;
 
     -- After closing the cursor, SELECT the updated records
-    SELECT g.gameName, pl.old_price, pl.new_price
+    SELECT g.gameName, gg.gameGenre, g.releaseDate, pl.old_price, pl.new_price
     FROM price_change_log AS pl
     JOIN Games AS g ON pl.gameName = g.gameName
+    JOIN GameGenre AS gg ON g.gameName = gg.gameName
     WHERE pl.changed_at >= NOW() - INTERVAL 1 SECOND;
 END $$
 

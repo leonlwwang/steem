@@ -1,4 +1,12 @@
 <!-- ApplyDiscountForm.svelte -->
+
+<style>
+  label, select, input[type="text"], input[type="number"], button {
+    display: block;
+    margin-bottom: 10px;
+  }
+</style>
+
 <script>
   import { createEventDispatcher } from 'svelte';
   import axios from 'axios';
