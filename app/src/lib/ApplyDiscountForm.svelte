@@ -86,6 +86,7 @@
     <button type="submit">Apply Discount</button>
   </form>
 </div>
+<h2>Discount Results</h2>
 <DiscountResults bind:results={discountResults} />
 
 
