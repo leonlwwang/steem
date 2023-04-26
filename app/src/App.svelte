@@ -3,7 +3,7 @@
   import AddUserForm from './lib/AddUserForm.svelte';
   import LoginForm from './lib/LoginForm.svelte';
   import { onMount } from 'svelte';
-
+  import ApplyDiscountForm from './lib/ApplyDiscountForm.svelte';
   let users = [];
 
   onMount(async () => {
@@ -104,6 +104,12 @@
     <h2>Search</h2>
     <SearchBar />
   </div>
+  
+  <!-- Discount bar-->
+  <div class="card">
+    <h2>Discount</h2>
+    <ApplyDiscountForm />
+  </div>
 </main>
 
 <style scoped>
@@ -116,4 +122,5 @@
     padding: 0.5rem;
     border: 1px solid #ccc;
   }
+
 </style>

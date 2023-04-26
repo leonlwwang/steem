@@ -1,0 +1,93 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS ApplyDiscountByCriteria $$
+
+CREATE PROCEDURE ApplyDiscountByCriteria(
+    IN p_genre VARCHAR(255),
+    IN p_release_date VARCHAR(255),
+    IN p_game_name VARCHAR(255),
+    IN p_discount_rate DECIMAL(5,2))
+BEGIN
+    -- Declare necessary variables and the cursor
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE v_gameName VARCHAR(255);
+    DECLARE v_oldPrice DECIMAL(10,4);
+    DECLARE v_newPrice DECIMAL(10,4);
+    DECLARE gameCursor CURSOR FOR
+        SELECT g.gameName, g.finalPrice
+        FROM Games AS g
+        JOIN GameGenre AS gg ON g.gameName = gg.gameName
+        WHERE (gg.gameGenre = p_genre OR p_genre = '')
+            AND (g.releaseDate = p_release_date OR p_release_date = '')
+            AND (
+                (p_game_name = '' AND g.gameName <> '')
+                OR REPLACE(g.gameName, '"', '') = p_game_name
+                OR g.gameName = CONCAT('"', p_game_name, '"')
+            );
+
+
+    -- Declare a continue handler for NOT FOUND condition
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Open the cursor
+    OPEN gameCursor;
+
+    -- Start the loop
+    read_loop: LOOP
+        -- Fetch the next game from the cursor
+        FETCH gameCursor INTO v_gameName, v_oldPrice;
+
+        -- Check if the cursor reached the end of fetched records
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Calculate the new price after applying the discount
+        SET v_newPrice = v_oldPrice * (1 - p_discount_rate);
+
+        -- Update the finalPrice in the Games table
+        UPDATE Games
+        SET finalPrice = v_newPrice
+        WHERE gameName = v_gameName;
+
+        -- Insert a record in price_change_log table to log the price change
+        INSERT INTO price_change_log (gameName, old_price, new_price, changed_at)
+        VALUES (v_gameName, v_oldPrice, v_newPrice, NOW());
+
+        -- Continue to the next iteration of the loop
+    END LOOP;
+
+    -- Close the cursor
+    CLOSE gameCursor;
+
+    -- After closing the cursor, SELECT the updated records
+    SELECT g.gameName, gg.gameGenre, g.releaseDate, pl.old_price, pl.new_price
+    FROM price_change_log AS pl
+    JOIN Games AS g ON pl.gameName = g.gameName
+    JOIN GameGenre AS gg ON g.gameName = gg.gameName
+    WHERE pl.changed_at >= NOW() - INTERVAL 1 SECOND;
+END $$
+
+DELIMITER ;
+
+CREATE TABLE price_change_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    gameName varchar(255),
+    old_price DECIMAL(10,4),
+    new_price DECIMAL(10,4),
+    changed_at DATETIME
+);
+
+DELIMITER $$
+
+CREATE TRIGGER log_price_change
+AFTER UPDATE ON Games
+FOR EACH ROW
+BEGIN
+    IF NEW.finalPrice <> OLD.finalPrice THEN
+        INSERT INTO price_change_log (gameName, old_price, new_price, changed_at)
+        VALUES (OLD.gameName, OLD.finalPrice, NEW.finalPrice, NOW());
+    END IF;
+END$$
+
+DELIMITER ;
