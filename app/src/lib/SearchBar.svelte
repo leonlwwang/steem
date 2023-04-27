@@ -1,4 +1,5 @@
 <script>
+  export let username;
   let search = "";
   let data = [];
 
@@ -46,6 +47,19 @@
     data = await response.json();
     console.log(data);
   }
+  
+  async function bookmarkGame(gameName) {
+    console.log("Bookmarking", gameName);
+
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('gameName', gameName);
+
+    const response = await fetch('/api/bookmarks/bookmarkGame', {
+      method: 'POST',
+      body: formData
+    });
+  }
 </script>
 
 <div class="btn-container">
@@ -68,6 +82,18 @@
   <p style="color:darkgray">{data.length} results found.</p>
   {#each data as game}
     <img src={game.image} alt={game.gameName} />
+    <p style="font-size: 0.9rem;"><b>{game.gameName}</b></p>
+    <p style="font-size: 0.9rem;"> Metacritic score: {game.metacriticScore} </p>
+    <p style="font-size: 0.9rem;"> {game.shortDescription} </p>
+    <p style="font-size: 0.9rem;"> Original price: {game.initialPrice} </p>
+    {#if game.initialPrice != game.finalPrice}
+        <p style="font-size: 0.9rem;"> <b>ON SALE!</b> Discount price: {game.finalPrice} </p>
+      {/if}
+    <div style="display: flex;">
+      <button on:click={() => bookmarkGame(game.gameName)} id="btn_bookmark" class="btn btn-primary" style="margin-right: 0.5rem;">
+        Bookmark
+      </button>
+    </div>
   {/each}
 {:else}
   <p style="color:darkgray">No results found.</p>

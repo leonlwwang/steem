@@ -49,7 +49,6 @@ public class GamesController {
         return ResponseEntity.ok(games);
     }
 
-    
     @PostMapping("/api/games/apply-discount")
     public ResponseEntity<List<Map<String, Object>>> applyDiscount(
         @RequestParam(required = false) String genre,
@@ -65,6 +64,4 @@ public class GamesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
-
-
 }
