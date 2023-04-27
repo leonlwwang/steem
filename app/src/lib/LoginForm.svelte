@@ -1,6 +1,9 @@
 <script>
+  import BookmarksViewer from './BookmarksViewer.svelte';
   import ChangeUsernameForm from './ChangeUsernameForm.svelte';
-
+  import SearchBar from './SearchBar.svelte';
+  
+  let bookmarks_comp;
   $: loggedIn = 0;
   $: usr = null;
 
@@ -54,7 +57,13 @@
   {/if}
 
   <h2>Change Username</h2>
-  <ChangeUsernameForm username={usr} />
+  <ChangeUsernameForm username={usr}/>
+
+  <h2>Bookmarks</h2>
+  <BookmarksViewer username={usr} bind:this={bookmarks_comp}/>
+
+  <h2>Search</h2>
+  <SearchBar username={usr}/>
   
   <style scoped>
     form {

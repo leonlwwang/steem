@@ -99,11 +99,12 @@
     <LoginForm />
   </div>
  
+  <!-- search bar was moved within login form as i have no idea how to share variables (specifically, username) between components -->
   <!-- search bar -->
-  <div class="card">
+  <!-- <div class="card">
     <h2>Search</h2>
     <SearchBar />
-  </div>
+  </div> -->
   
   <!-- Discount bar-->
   <div class="card">
