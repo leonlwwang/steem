@@ -32,16 +32,18 @@
                 <th>Release Date</th>
                 <th>Old Price</th>
                 <th>New Price</th>
+                <th>Lowest Ever Price</th>
             </tr>
         </thead>
         <tbody>
-            {#each results as { gameName, gameGenre, releaseDate, old_price, new_price }}
+            {#each results as { gameName, gameGenre, releaseDate, old_price, new_price, lowest_price}}
             <tr>
                 <td>{gameName}</td>
                 <td>{gameGenre}</td>
                 <td>{releaseDate}</td>
                 <td>{old_price}</td>
                 <td>{new_price}</td>
+                <td>{lowest_price}</td>
             </tr>
             {/each}
         </tbody>
