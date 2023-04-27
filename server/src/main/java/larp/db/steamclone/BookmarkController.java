@@ -38,4 +38,26 @@ public class BookmarkController {
         jdbcTemplate.update(sql, username, gameName);
         return ResponseEntity.ok("Bookmark " + gameName + " deleted for " + username);
     }
+    
+    @GetMapping("/api/bookmarks/recommendations/{username}")
+    public ResponseEntity<List<Map<String, Object>>> getRecommendations(@PathVariable String username) {
+        String sql = "SELECT * "  + 
+                    "FROM Games ga1 " +
+                    "WHERE 		ga1.gameName IN (SELECT ga2.gameName " +
+                                                " FROM Games ga2 NATURAL JOIN GameCategory gc1 NATURAL JOIN GameGenre ge1 " +
+                                                "WHERE gc1.gameCategory IN (SELECT gc2.gameCategory " +
+                                                                    "FROM Bookmarks NATURAL JOIN GameCategory gc2 " +
+                                                                    "WHERE username='" + username + "') " +
+                                                    "AND ge1.gameGenre IN (SELECT ge2.gameGenre " +
+                                                                    "FROM Bookmarks NATURAL JOIN GameGenre ge2 " +
+                                                                    "WHERE username='" + username + "')) " +
+                            "AND ga1.website IN (SELECT ga3.website " +
+                                                "FROM Bookmarks NATURAL JOIN Games ga3 " +
+                                                "WHERE username='" + username + "') " +
+                            "AND ga1.gameName NOT IN (SELECT b.gameName " +
+                                                    "FROM Bookmarks b " +
+                                                    "WHERE username='" + username + "') " +
+                    "LIMIT 10";
+        return ResponseEntity.ok(jdbcTemplate.queryForList(sql));
+    }
 }

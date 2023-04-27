@@ -1,6 +1,6 @@
 <script>
   export let username;
-  let search = "Counter";
+  let search = "";
   let data = [];
 
   async function submitSearch(e) {
@@ -86,6 +86,9 @@
     <p style="font-size: 0.9rem;"> Metacritic score: {game.metacriticScore} </p>
     <p style="font-size: 0.9rem;"> {game.shortDescription} </p>
     <p style="font-size: 0.9rem;"> Original price: {game.initialPrice} </p>
+    {#if game.initialPrice != game.finalPrice}
+        <p style="font-size: 0.9rem;"> <b>ON SALE!</b> Discount price: {game.finalPrice} </p>
+      {/if}
     <div style="display: flex;">
       <button on:click={() => bookmarkGame(game.gameName)} id="btn_bookmark" class="btn btn-primary" style="margin-right: 0.5rem;">
         Bookmark
