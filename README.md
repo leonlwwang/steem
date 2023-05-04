@@ -10,7 +10,7 @@ For our CS 411 project, we want to devise a cleaner, minimalistic, and more intu
 
 https://user-images.githubusercontent.com/69338674/236111833-3f65da4d-4b01-47b7-8d28-d87111eaf163.mp4
 
-
+[Youtube](https://youtu.be/zx8GkHYznz0)
 
 # Interface Demo
 Make sure that you have npm, NodeJS, Java SDK, and Maven installed.
