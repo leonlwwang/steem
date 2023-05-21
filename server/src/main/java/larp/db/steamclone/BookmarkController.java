@@ -1,44 +1,54 @@
 package larp.db.steamclone;
+
+import org.jooq.*;
+/*
+import org.jooq.Record;
+import org.jooq.impl.DSL;
+*/
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import static larp.db.steamclone.generated.Tables.*;
 
 @RestController
 public class BookmarkController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private DSLContext dslContext;
+
     @GetMapping("/api/bookmarks/{username}")
     public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable String username) {
-        String sql = "SELECT * FROM Games ga WHERE ga.gameName IN " + "(SELECT b.gameName FROM Bookmarks b WHERE username='" + username + "')";
-        return ResponseEntity.ok(jdbcTemplate.queryForList(sql));
+        List<Map<String, Object>> bookmarks = dslContext.select()
+                .from(GAMES)
+                .where(GAMES.GAMENAME.in(dslContext.select(BOOKMARKS.GAMENAME).from(BOOKMARKS).where(BOOKMARKS.USERNAME.eq(username))))
+                .fetchMaps();
+        return ResponseEntity.ok(bookmarks);
     }
 
     @PostMapping("/api/bookmarks/bookmarkGame")
     public ResponseEntity<String> addBookmark(@RequestParam String username, @RequestParam String gameName) {
-        String sql = "INSERT INTO Bookmarks (username, gameName) VALUES (?, ?)";
-        jdbcTemplate.update(sql, username, gameName);
+        dslContext.insertInto(BOOKMARKS)
+                .set(BOOKMARKS.USERNAME, username)
+                .set(BOOKMARKS.GAMENAME, gameName)
+                .execute();
         return ResponseEntity.ok("Bookmarked " + gameName + " for " + username);
     }
 
     @PostMapping("/api/bookmarks/removeBookmarkedGame")
     public ResponseEntity<String> removeBookmark(@RequestParam String username, @RequestParam String gameName) {
-        String sql = "DELETE FROM Bookmarks WHERE username=? AND gameName=?";
-        jdbcTemplate.update(sql, username, gameName);
+        dslContext.deleteFrom(BOOKMARKS)
+                .where(BOOKMARKS.USERNAME.eq(username).and(BOOKMARKS.GAMENAME.eq(gameName)))
+                .execute();
         return ResponseEntity.ok("Bookmark " + gameName + " deleted for " + username);
     }
-    
+
     @GetMapping("/api/bookmarks/recommendations/{username}")
     public ResponseEntity<List<Map<String, Object>>> getRecommendations(@PathVariable String username) {
         String sql = "SELECT * "  + 
@@ -60,4 +70,47 @@ public class BookmarkController {
                     "LIMIT 10";
         return ResponseEntity.ok(jdbcTemplate.queryForList(sql));
     }
+
+    /*
+    @GetMapping("/api/bookmarks/recommendations/{username}")
+    public ResponseEntity<Result<Record>> getRecommendations(@PathVariable String username) {
+        Result<Record> result = dslContext.select()
+                .from(GAMES)
+                .where(GAMES.GAMENAME.in(
+                        DSL.select(GAMES.GAMENAME)
+                                .from(GAMES)
+                                .naturalJoin(GAMECATEGORY)
+                                .naturalJoin(GAMEGENRE)
+                                .where(GAMECATEGORY.GAMECATEGORY.in(
+                                        DSL.select(GAMECATEGORY.GAMECATEGORY)
+                                                .from(BOOKMARKS)
+                                                .naturalJoin(GAMECATEGORY)
+                                                .where(BOOKMARKS.USERNAME.eq(username))
+                                ))
+                                .and(GAMEGENRE.GAMEGENRE.in(
+                                        DSL.select(GAMEGENRE.GAMEGENRE)
+                                                .from(BOOKMARKS)
+                                                .naturalJoin(GAMEGENRE)
+                                                .where(BOOKMARKS.USERNAME.eq(username))
+                                ))
+                        )
+                )
+                .and(GAMES.WEBSITE.in(
+                        DSL.select(GAMES.WEBSITE)
+                                .from(BOOKMARKS)
+                                .naturalJoin(GAMES)
+                                .where(BOOKMARKS.USERNAME.eq(username))
+                ))
+                .and(GAMES.GAMENAME.notIn(
+                        DSL.select(BOOKMARKS.GAMENAME)
+                                .from(BOOKMARKS)
+                                .where(BOOKMARKS.USERNAME.eq(username))
+                ))
+                .limit(10)
+                .fetch();
+
+        return ResponseEntity.ok(result);
+    }
+    */
+
 }

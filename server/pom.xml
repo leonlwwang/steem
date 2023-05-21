@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.5</version>
+		<version>3.0.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>larp.db</groupId>
@@ -37,11 +37,29 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- AWS -->
 		<dependency>
     		<groupId>software.aws.rds</groupId>
     		<artifactId>aws-mysql-jdbc</artifactId>
     		<version>1.1.7</version>
   		</dependency>
+
+		<!-- jOOQ -->
+		<dependency>
+		    <groupId>org.jooq</groupId>
+		    <artifactId>jooq</artifactId>
+		    <version>3.18.4</version>
+		</dependency>
+		<dependency>
+ 			<groupId>org.jooq</groupId>
+ 			<artifactId>jooq-meta</artifactId>
+ 			<version>3.18.4</version>
+		</dependency>
+		<dependency>
+ 			<groupId>org.jooq</groupId>
+ 			<artifactId>jooq-codegen</artifactId>
+ 			<version>3.18.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -50,6 +68,53 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<!-- jOOQ Code Generation Plugin -->
+        	<plugin>
+        	    <groupId>org.jooq</groupId>
+        	    <artifactId>jooq-codegen-maven</artifactId>
+        	    <version>3.18.4</version>
+        	    <executions>
+        	        <execution>
+        	            <id>generate-jooq-sources</id>
+        	            <phase>generate-sources</phase>
+        	            <goals>
+        	                <goal>generate</goal>
+        	            </goals>
+        	            <configuration>
+        	                <jdbc>
+        	                    <driver>com.mysql.cj.jdbc.Driver</driver>
+        	                    <url>jdbc:mysql://steem.cf8nrfgxeyuv.us-east-2.rds.amazonaws.com:3306/steamclone</url>
+        	                    <user>root</user>
+        	                    <password>70ywXicdCfXhezIKwMTD</password>
+        	                </jdbc>
+        	                <generator>
+        	                    <database>
+        	                        <name>org.jooq.meta.mysql.MySQLDatabase</name>
+        	                        <includes>.*</includes>
+        	                        <excludes></excludes>
+        	                        <inputSchema>steamclone</inputSchema>
+        	                    </database>
+        	                    <generate>
+        	                        <daos>false</daos>
+        	                        <jpaAnnotations>false</jpaAnnotations>
+        	                    </generate>
+        	                    <target>
+        	                        <packageName>larp.db.steamclone.generated</packageName>
+        	                        <directory>target/generated-sources/jooq</directory>
+        	                    </target>
+        	                </generator>
+        	            </configuration>
+        	        </execution>
+        	    </executions>
+        	    <dependencies>
+        	        <dependency>
+        	            <groupId>mysql</groupId>
+        	            <artifactId>mysql-connector-java</artifactId>
+        	            <version>8.0.31</version>
+        	        </dependency>
+        	    </dependencies>
+        	</plugin>
 		</plugins>
 	</build>
 

@@ -1,56 +1,54 @@
 package larp.db.steamclone;
-import java.util.List;
 
+import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static larp.db.steamclone.generated.Tables.USERS;
 
 @RestController
 public class UserController {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private DSLContext dslContext;
 
     @GetMapping("/api/users")
     public ResponseEntity<List<User>> getUsers() {
-        String sql = "SELECT * FROM Users";
-        List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> new User(
-            rs.getString("username"),
-            rs.getString("realName"),
-            rs.getString("emailAddress")
-        ));
+        List<User> users = dslContext.selectFrom(USERS)
+                .fetchInto(User.class);
         return ResponseEntity.ok(users);
     }
 
     @PostMapping("/api/users")
     public ResponseEntity<String> createUser(@RequestBody User user) {
-        String sql = "INSERT INTO Users (username, realName, emailAddress) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, user.getUsername(), user.getRealName(), user.getEmailAddress());
+        dslContext.insertInto(USERS)
+                .set(USERS.USERNAME, user.getUsername())
+                .set(USERS.REALNAME, user.getRealName())
+                .set(USERS.EMAILADDRESS, user.getEmailAddress())
+                .execute();
         return ResponseEntity.ok("User created with username: " + user.getUsername());
     }
 
     @GetMapping("/api/users/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        String sql = "SELECT * FROM Users WHERE username = ?";
-        User user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new User(
-            rs.getString("username"),
-            rs.getString("realName"),
-            rs.getString("emailAddress")
-        ), username);
-        return ResponseEntity.ok(user);
+        User user = dslContext.selectFrom(USERS)
+                .where(USERS.USERNAME.eq(username))
+                .fetchOneInto(User.class);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 
     @PutMapping("/api/users/{username}")
     public ResponseEntity<String> updateUsername(@PathVariable String username, @RequestBody String newUsername) {
-        String sql = "UPDATE Users SET username = ? WHERE username = ?";
-        newUsername = newUsername.substring(1, newUsername.length() - 1);
-        int rowsAffected = jdbcTemplate.update(sql, newUsername, username);
+        int rowsAffected = dslContext.update(USERS)
+                .set(USERS.USERNAME, newUsername.substring(1, newUsername.length() - 1))
+                .where(USERS.USERNAME.eq(username))
+                .execute();
         if (rowsAffected == 0) {
             return ResponseEntity.notFound().build();
         } else {
@@ -60,8 +58,14 @@ public class UserController {
 
     @DeleteMapping("/api/users/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username) {
-        String sql = "DELETE FROM Users WHERE username = ?";
-        jdbcTemplate.update(sql, username);
-        return ResponseEntity.ok("User deleted with username: " + username);
+        int rowsAffected = dslContext.deleteFrom(USERS)
+                .where(USERS.USERNAME.eq(username))
+                .execute();
+        if (rowsAffected == 0) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok("User deleted with username: " + username);
+        }
     }
 }
+
