@@ -1,5 +1,3 @@
-<!-- ApplyDiscountForm.svelte -->
-
 <style>
   label, select, input[type="text"], input[type="number"], button {
     display: block;
@@ -88,7 +86,4 @@
 </div>
 <h2>Discount Results</h2>
 <DiscountResults bind:results={discountResults} />
-
-
-
 

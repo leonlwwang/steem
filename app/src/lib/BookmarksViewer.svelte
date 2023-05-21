@@ -21,7 +21,6 @@
 
         console.log(bookmarked_games);
 
-        // also get recommendations 
         getBookmarksRecommendations();
     }
 
@@ -37,7 +36,6 @@
             body: formData
         });
 
-        // now update view
         getBookmarks();
     }
 
@@ -60,7 +58,6 @@
 
         console.log("Remove bookmark response ", response);
 
-        // now update bookmarks view
         getBookmarks();
     }
 
