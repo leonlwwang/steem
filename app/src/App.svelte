@@ -3,7 +3,6 @@
   import AddUserForm from './lib/AddUserForm.svelte';
   import LoginForm from './lib/LoginForm.svelte';
   import { onMount } from 'svelte';
-  import ApplyDiscountForm from './lib/ApplyDiscountForm.svelte';
   let users = [];
 
   onMount(async () => {
@@ -98,19 +97,7 @@
     <h2>Login</h2>
     <LoginForm />
   </div>
- 
-  <!-- search bar was moved within login form as i have no idea how to share variables (specifically, username) between components -->
-  <!-- search bar -->
-  <!-- <div class="card">
-    <h2>Search</h2>
-    <SearchBar />
-  </div> -->
-  
-  <!-- Discount bar-->
-  <div class="card">
-    <h2>Discount</h2>
-    <ApplyDiscountForm />
-  </div>
+
 </main>
 
 <style scoped>
