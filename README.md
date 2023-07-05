@@ -2,7 +2,7 @@
 
 # About
 
-This project is a mockup of a newly-imagined Steam, the popular video game distribution service. It's an old CS 411 project, where we wanted to devise a cleaner, minimalistic, and more intuitive version of the Steam website store dedicated for browsing games. It's being hosted on Heroku and connects to an Amazon RDS database.
+This project is a mockup of a newly-imagined Steam, the popular video game distribution service. It's an old CS 411 project, where we wanted to devise a cleaner, minimalistic, and more intuitive version of the Steam website store dedicated for browsing games.
 
 Thank you to my teammates Aaron De Los Santos, Raymond Bellin, and Pinakin Kanade for your contributions to the original project!
 
