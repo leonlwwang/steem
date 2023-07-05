@@ -1,7 +1,6 @@
 [![steem-title](https://github.com/leonlwwang/steem/assets/69338674/3ca36112-fec8-4798-9bb5-80798eddb64c)](https://steem.herokuapp.com/)
 
 # About
-**Status: [it's live](https://steem.herokuapp.com/) 🟢**
 
 This project is a mockup of a newly-imagined Steam, the popular video game distribution service. It's an old CS 411 project, where we wanted to devise a cleaner, minimalistic, and more intuitive version of the Steam website store dedicated for browsing games. It's being hosted on Heroku and connects to an Amazon RDS database.
 
