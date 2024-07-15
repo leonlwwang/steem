@@ -1,3 +1,3 @@
 # `Steem`
 
-mock steam store for CS 411 (database systems)
+mock steam store, old project for CS 411
